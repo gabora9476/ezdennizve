@@ -3,266 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfumes & Barbería - Tarjeta de Presentación</title>
+    <title>Elegance - Perfumes & Barbería</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Background dots animation */
-        @keyframes moveDots {
-            0% { transform: translateY(0) translateX(0); }
-            50% { transform: translateY(-50px) translateX(20px); }
-            100% { transform: translateY(0) translateX(0); }
+        :root {
+            --electric-blue: #00f2ff;
+            --electric-glow: rgba(0, 242, 255, 0.6);
+            --dark-bg: #05070a;
         }
 
-        .dots-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        body {
+            background-color: var(--dark-bg);
+            background: radial-gradient(circle at center, #0a192f 0%, #05070a 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* --- ELECTRIC BORDER ANIMADO (SOLO EN EL BORDE) --- */
+        .electric-wrapper {
+            position: relative;
+            padding: 3px;
+            border-radius: 38px;
             overflow: hidden;
-            z-index: -1;
-            opacity: 0.2;
+            z-index: 1;
         }
 
-        .dot {
+        .electric-wrapper::before {
+            content: '';
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background-color: white;
-            border-radius: 50%;
-            animation: moveDots 15s infinite ease-in-out;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, var(--electric-blue), transparent 20%);
+            top: -50%;
+            left: -50%;
+            animation: rotateBorder 4s linear infinite;
+            z-index: -1;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        @keyframes rotateBorder {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
-        
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+
+        /* --- EFECTO AGUA / GLASSMORPHISM iOS --- */
+        .glass-card {
+            background: rgba(10, 20, 30, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 35px;
+            position: relative;
+            width: 100%;
+            z-index: 2;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+
+        /* --- GRID DE SERVICIOS CON ILUMINACIÓN AL TOCAR --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
         }
-        
-        .animated-bg {
-            background: linear-gradient(-45deg, #0f172a, #1e293b, #334155, #475569);
-            background-size: 400% 400%;
-            animation: gradientBG 12s ease infinite;
+
+        .service-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 20px 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
         }
-        
-        .animate-float {
+
+        .service-item:hover, .service-item:active {
+            background: rgba(0, 242, 255, 0.15);
+            border-color: var(--electric-blue);
+            box-shadow: 0 0 20px var(--electric-glow);
+            transform: translateY(-3px);
+        }
+
+        .service-item i {
+            color: #ffb400;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        /* --- BOTONES REDES SOCIALES CIRCULARES --- */
+        .social-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--electric-blue);
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: scale(1.2) translateY(-5px);
+            background: var(--electric-blue);
+            color: black;
+            box-shadow: 0 0 15px var(--electric-blue);
+        }
+
+        /* --- BOTÓN VER PERFUMES --- */
+        .btn-catalog {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-catalog:hover {
+            background: rgba(0, 242, 255, 0.1);
+            border-color: var(--electric-blue);
+            box-shadow: 0 0 15px var(--electric-glow);
+        }
+
+        .logo-float {
             animation: float 4s ease-in-out infinite;
         }
-        
-        .animate-fade-in {
-            animation: fadeIn 1s ease-out forwards;
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
         }
-        
-        .animate-fade-in-delay {
-            animation: fadeIn 1s ease-out 0.3s forwards;
-            opacity: 0;
+
+        .powered-by {
+            margin-top: 25px;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.4);
+            z-index: 10;
+            letter-spacing: 1px;
         }
-        
-        .card {
-            backdrop-filter: blur(12px);
-            background-color: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(255, 215, 0, 0.1);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            transform-style: preserve-3d;
-            perspective: 1000px;
-        }
-        
-        .card:hover {
-            transform: translateY(-8px) rotateX(2deg) rotateY(2deg);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-            border-color: rgba(255, 215, 0, 0.3);
-        }
-        
-        .social-icon {
-            transition: all 0.3s ease;
-        }
-        
-        .social-icon:hover {
-            transform: scale(1.2) translateY(-3px);
-        }
-        
-        .whatsapp-btn {
-            transition: all 0.3s ease;
-        }
-        
-        .whatsapp-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 15px -3px rgba(37, 211, 102, 0.3);
+
+        .powered-by a {
+            color: var(--electric-blue);
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
         }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 animated-bg relative">
-    <!-- Animated background dots -->
-    <div class="dots-container" id="dotsContainer"></div>
-    <div class="card rounded-2xl overflow-hidden w-full max-w-md text-white shadow-xl">
-        <!-- Header with logo and title -->
-        <div class="bg-gradient-to-r from-gray-800 to-gray-700 p-6 text-center">
-            <div class="flex justify-center mb-4">
-                <div class="relative transition-all duration-500 hover:scale-105">
-                    <div class="absolute -inset-2 bg-gradient-to-r from-yellow-400 to-amber-600 rounded-full blur opacity-75 animate-pulse"></div>
-                    <div class="relative bg-transparent p-2">
-                        <img src="https://i.ibb.co/Q3s0sjnx/0-Recurso-2-Perfumesw.png" alt="Logo Elegance" class="h-24 w-auto object-contain animate-float">
-                    </div>
-                </div>
-            </div>
-            <h1 class="text-3xl font-bold mb-1 animate-fade-in">ELEGANCE</h1>
-            <p class="text-amber-300 font-medium animate-fade-in-delay">Perfumes & Barbería</p>
-        </div>
-        
-        <!-- Main content -->
-        <div class="p-6 bg-gray-900 bg-opacity-70">
-            <div class="flex items-center mb-6">
-                <div class="flex-shrink-0 mr-4">
-                    <div class="h-16 w-16 rounded-full overflow-hidden border-2 border-amber-400">
-                        <img src="https://images.unsplash.com/photo-1605497788044-5a32c7078486?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Perfumes" class="h-full w-full object-cover">
-                    </div>
-                </div>
-                <div>
-                    <h2 class="text-xl font-semibold">Estilo y Fragancia</h2>
-                    <p class="text-gray-300 text-sm">Transformamos tu imagen con los mejores aromas y cortes</p>
-                </div>
-            </div>
+<body>
+
+    <div class="electric-wrapper max-w-[380px] w-full">
+        <div class="glass-card">
             
-            <div class="mb-6">
-                <h3 class="text-lg font-medium mb-3 text-amber-300">Nuestros Servicios</h3>
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-3 text-center">
-                        <i class="fas fa-spray-can text-amber-400 mb-1"></i>
-                        <p class="text-sm">Perfumes exclusivos</p>
+            <div class="p-8 text-center border-b border-white/5">
+                <div class="logo-float mb-4">
+                    <img src="https://i.ibb.co/Q3s0sjnx/0-Recurso-2-Perfumesw.png" alt="Logo Elegance" class="h-20 mx-auto">
+                </div>
+                <h1 class="text-3xl font-black tracking-tighter text-white" style="text-shadow: 0 0 10px var(--electric-blue);">ELEGANCE</h1>
+                <p class="text-[0.6rem] text-cyan-400 tracking-[0.5em] uppercase mt-1">Perfumes & Barbería</p>
+            </div>
+
+            <div class="p-6">
+                <h3 class="text-[0.7rem] font-bold text-gray-500 uppercase tracking-widest text-center mb-4">Nuestros Servicios</h3>
+                
+                <div class="services-grid">
+                    <div class="service-item">
+                        <i class="fas fa-spray-can"></i>
+                        <span class="text-[0.7rem] font-semibold">Perfumes Exclusivos</span>
                     </div>
-                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-3 text-center">
-                        <i class="fas fa-cut text-amber-400 mb-1"></i>
-                        <p class="text-sm">Cortes modernos</p>
+                    <div class="service-item">
+                        <i class="fas fa-cut"></i>
+                        <span class="text-[0.7rem] font-semibold">Cortes Modernos</span>
                     </div>
-                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-3 text-center">
-                        <i class="fas fa-male text-amber-400 mb-1"></i>
-                        <p class="text-sm">Afeitado clásico</p>
+                    <div class="service-item">
+                        <i class="fas fa-male"></i>
+                        <span class="text-[0.7rem] font-semibold">Afeitado Clásico</span>
                     </div>
-                    <div class="bg-gray-800 bg-opacity-50 rounded-lg p-3 text-center">
-                        <i class="fas fa-gem text-amber-400 mb-1"></i>
-                        <p class="text-sm">Tratamientos premium</p>
+                    <div class="service-item">
+                        <i class="fas fa-gem"></i>
+                        <span class="text-[0.7rem] font-semibold">Tratamientos Premium</span>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Contact section -->
-            <div class="mb-6">
-                <h3 class="text-lg font-medium mb-3 text-amber-300">Contacto</h3>
-                <div class="bg-gray-800 bg-opacity-50 rounded-lg p-4">
-                    <a href="tel:+584129750307" onclick="saveNumber(event)" class="flex items-center justify-between group">
-                        <div class="flex items-center">
-                            <i class="fas fa-phone-alt text-amber-400 mr-3"></i>
-                            <span class="font-medium">+58 4129750307</span>
-                        </div>
-                        <span class="text-xs bg-gray-700 px-2 py-1 rounded-full group-hover:bg-amber-500 transition">Guardar contacto</span>
+
+                <a href="catalogo.html" class="btn-catalog w-full py-4 flex items-center justify-center gap-3 text-sm font-bold text-white mb-8">
+                    <i class="fas fa-shopping-bag"></i>
+                    VER PERFUMES
+                </a>
+
+                <div class="space-y-4">
+                    <a href="https://wa.me/584129750307" class="w-full bg-[#25D366] text-black font-black py-4 rounded-2xl flex items-center justify-center gap-2 hover:brightness-110 transition">
+                        <i class="fab fa-whatsapp text-xl"></i>
+                        AGENDAR CITA
                     </a>
                     
-                    <div class="mt-4 pt-4 border-t border-gray-700">
-                        <a href="https://wa.me/584129750307" target="_blank" class="whatsapp-btn flex items-center justify-center bg-gradient-to-r from-green-500 to-green-600 rounded-lg py-2 px-4 font-medium">
-                            <i class="fab fa-whatsapp text-white mr-2 text-lg"></i>
-                            Contactar por WhatsApp
-                        </a>
+                    <div class="flex justify-center gap-4">
+                        <a href="tel:+584129750307" class="social-icon"><i class="fas fa-phone-alt"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
                     </div>
                 </div>
             </div>
-            
-            <!-- Social media -->
-            <div>
-                <h3 class="text-lg font-medium mb-3 text-amber-300">Síguenos</h3>
-                <div class="flex justify-center space-x-4">
-                    <a href="#" class="social-icon bg-blue-600 h-10 w-10 rounded-full flex items-center justify-center">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a href="#" class="social-icon bg-pink-600 h-10 w-10 rounded-full flex items-center justify-center">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="social-icon bg-blue-400 h-10 w-10 rounded-full flex items-center justify-center">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <a href="#" class="social-icon bg-red-600 h-10 w-10 rounded-full flex items-center justify-center">
-                        <i class="fab fa-youtube"></i>
-                    </a>
-                    <a href="#" class="social-icon bg-gray-700 h-10 w-10 rounded-full flex items-center justify-center">
-                        <i class="fab fa-tiktok"></i>
-                    </a>
-                </div>
+
+            <div class="p-4 text-center">
+                <p class="text-[9px] text-gray-600 uppercase tracking-widest">© 2026 Elegance Premium Experience</p>
             </div>
-        </div>
-        
-        <!-- Footer -->
-        <div class="bg-gray-900 bg-opacity-80 py-3 text-center text-xs text-gray-400">
-            <p>© 2023 Elegance Perfumes & Barbería. Todos los derechos reservados.</p>
         </div>
     </div>
 
-    <script>
-        // Create animated dots
-        document.addEventListener('DOMContentLoaded', function() {
-            const container = document.getElementById('dotsContainer');
-            const dotCount = 30;
-            
-            for (let i = 0; i < dotCount; i++) {
-                const dot = document.createElement('div');
-                dot.classList.add('dot');
-                
-                // Random position
-                dot.style.left = `${Math.random() * 100}%`;
-                dot.style.top = `${Math.random() * 100}%`;
-                
-                // Random size
-                const size = 2 + Math.random() * 4;
-                dot.style.width = `${size}px`;
-                dot.style.height = `${size}px`;
-                
-                // Random animation duration and delay
-                const duration = 10 + Math.random() * 20;
-                const delay = Math.random() * 10;
-                dot.style.animationDuration = `${duration}s`;
-                dot.style.animationDelay = `${delay}s`;
-                
-                container.appendChild(dot);
-            }
-        });
+    <div class="powered-by">
+        powered: by <a href="https://wa.me/584228745777?text=Estoy%20interesado%20en%20sus%20servicios%20digitales" target="_blank">gabora646</a>
+    </div>
 
-        function saveNumber(e) {
-            e.preventDefault();
-            const phoneNumber = '+584129750307';
-            
-            if (navigator.clipboard) {
-                navigator.clipboard.writeText(phoneNumber).then(() => {
-                    alert('Número copiado al portapapeles: ' + phoneNumber);
-                }).catch(err => {
-                    console.error('Error al copiar: ', err);
-                    window.location.href = 'tel:' + phoneNumber;
-                });
-            } else {
-                // Fallback for browsers that don't support clipboard API
-                const input = document.createElement('input');
-                input.value = phoneNumber;
-                document.body.appendChild(input);
-                input.select();
-                document.execCommand('copy');
-                document.body.removeChild(input);
-                alert('Número copiado al portapapeles: ' + phoneNumber);
-            }
-            
-            // Still open the dialer after copying
-            setTimeout(() => {
-                window.location.href = 'tel:' + phoneNumber;
-            }, 1000);
-        }
-    </script>
 </body>
 </html>
