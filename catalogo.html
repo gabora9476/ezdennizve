@@ -840,6 +840,22 @@
                 max-width: 95%;
             }
         }
+
+        /* Mensaje cuando no hay productos */
+        .empty-message {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .empty-message i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+            opacity: 0.5;
+        }
     </style>
 </head>
 <body>
@@ -1064,15 +1080,17 @@
     <script>
         // --- CONFIGURACIÓN Y DATOS ---
         let products = [
-            {id:1,name:"Perfume Dior Sauvage",price:85,category:"perfume",images:["https://i.imgur.com/4L6X5Qj.png"],desc:"Fragancia fresca y especiada",attributes:{Volumen:["60ml","100ml"]},isNew:true,inStock:true},
-            {id:2,name:"Zapatillas Nike Air",price:120,category:"shoes",images:["https://via.placeholder.com/300"],desc:"Comodidad y estilo",attributes:{Talla:["38","39","40","41"],Horma:["Normal","Ancha"]},isNew:false,inStock:true},
-            {id:3,name:"Camisa Elegante",price:45,category:"clothing",images:["https://via.placeholder.com/300"],desc:"100% algodón",attributes:{Talla:["S","M","L","XL"]},isNew:false,inStock:false}
+            {id:1,name:"Perfume Dior Sauvage",price:85,category:"perfume",images:["https://i.ibb.co/4L6X5Qj/perfume1.png"],desc:"Fragancia fresca y especiada para caballero",attributes:{Volumen:["60ml","100ml"]},isNew:true,inStock:true},
+            {id:2,name:"Zapatillas Nike Air Max",price:120,category:"shoes",images:["https://i.ibb.co/7K9kVWy/shoes1.png"],desc:"Comodidad y estilo urbano",attributes:{Talla:["38","39","40","41","42"],Horma:["Normal","Ancha"]},isNew:false,inStock:true},
+            {id:3,name:"Camisa Elegante Premium",price:45,category:"clothing",images:["https://i.ibb.co/9wXrJ2f/shirt1.png"],desc:"100% algodón egipcio de alta calidad",attributes:{Talla:["S","M","L","XL"]},isNew:true,inStock:true},
+            {id:4,name:"Reloj Deportivo Smart",price:95,category:"accessories",images:["https://i.ibb.co/pLn3qZj/watch1.png"],desc:"Resistente al agua, GPS integrado",attributes:{Color:["Negro","Plata","Azul"]},isNew:true,inStock:true}
         ];
 
         let cart = JSON.parse(localStorage.getItem('butic_cart')) || [];
         let currentCategory = 'all';
         let currentProduct = null;
         let currentImageIndex = 0;
+        let isAdminLoggedIn = false;
 
         const config = {
             binId: localStorage.getItem('butic_binId') || '',
@@ -1085,12 +1103,25 @@
 
         // --- INICIALIZACIÓN ---
         window.onload = () => {
-            loadConfig();
-            renderCategories();
-            renderProducts(products);
-            renderFooter();
-            updateCartCount();
-            if(config.binId && config.apiKey) fetchData();
+            console.log('🚀 Inicializando EzDenniz Shop...');
+            console.log('📦 Productos cargados:', products.length);
+            
+            try {
+                loadConfig();
+                renderCategories();
+                renderProducts(products);
+                renderFooter();
+                updateCartCount();
+                
+                if(config.binId && config.apiKey) {
+                    fetchData();
+                }
+                
+                console.log('✅ Tienda inicializada correctamente');
+            } catch(error) {
+                console.error('❌ Error en inicialización:', error);
+                showToast('⚠️ Error al cargar la tienda');
+            }
         };
 
         function loadConfig() {
@@ -1139,20 +1170,32 @@
         }
 
         function renderProducts(items) {
-            const isAdmin = isAdminMode();
-            const visible = isAdmin ? items : items.filter(p => p.inStock);
+            const grid = document.getElementById('productGrid');
+            if(!grid) return console.error('Grid no encontrado');
             
-            document.getElementById('productGrid').innerHTML = visible.map(p => `
+            const visible = isAdminLoggedIn ? items : items.filter(p => p.inStock);
+            
+            if(visible.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-message">
+                        <i class="fas fa-shopping-bag"></i>
+                        <div>No hay productos disponibles en este momento</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = visible.map(p => `
                 <div class="product-card" onclick="openProductModal(${p.id})">
                     ${p.isNew ? '<div class="badge-new">NUEVO</div>' : ''}
                     ${!p.inStock ? '<div class="badge-sold">AGOTADO</div>' : ''}
                     <div class="product-img-container">
-                        <img src="${p.images[0]}" alt="${p.name}" class="product-img">
+                        <img src="${p.images[0] || 'https://via.placeholder.com/300'}" alt="${p.name}" class="product-img" onerror="this.src='https://via.placeholder.com/300/0a192f/00f2ff?text=Sin+Imagen'">
                     </div>
                     <div class="product-info">
                         <div class="product-name">${p.name}</div>
                         <div class="product-price">$${p.price.toFixed(2)}</div>
-                        ${p.inStock ? '<button class="btn-add-cart" onclick="event.stopPropagation(); quickAddToCart('+p.id+')"><i class="fas fa-cart-plus"></i> AGREGAR</button>' : ''}
+                        ${p.inStock ? `<button class="btn-add-cart" onclick="event.stopPropagation(); quickAddToCart(${p.id})"><i class="fas fa-cart-plus"></i> AGREGAR</button>` : ''}
                     </div>
                 </div>
             `).join('');
@@ -1172,36 +1215,50 @@
 
         // --- MODAL PRODUCTO ---
         function openProductModal(id) {
-            currentProduct = products.find(p => p.id === id);
-            if(!currentProduct) return;
+            const productId = parseInt(id);
+            currentProduct = products.find(p => p.id === productId);
+            
+            if(!currentProduct) {
+                showToast("⚠️ Producto no encontrado");
+                return;
+            }
             
             currentImageIndex = 0;
             document.getElementById('modalProductName').innerText = currentProduct.name;
             document.getElementById('modalPrice').innerText = `$${currentProduct.price.toFixed(2)}`;
-            document.getElementById('modalDesc').innerText = currentProduct.desc || 'Sin descripción';
+            document.getElementById('modalDesc').innerText = currentProduct.desc || 'Sin descripción disponible';
             
-            // Galería
-            document.getElementById('galleryImages').innerHTML = currentProduct.images.map((img, i) => 
-                `<img src="${img}" class="gallery-img ${i===0?'active':''}" alt="${currentProduct.name}">`
+            // Galería de imágenes
+            const galleryImages = document.getElementById('galleryImages');
+            galleryImages.innerHTML = currentProduct.images.map((img, i) => 
+                `<img src="${img}" class="gallery-img ${i===0?'active':''}" alt="${currentProduct.name}" onerror="this.src='https://via.placeholder.com/400/0a192f/00f2ff?text=Sin+Imagen'">`
             ).join('');
             
-            document.getElementById('galleryDots').innerHTML = currentProduct.images.map((_, i) => 
-                `<div class="dot ${i===0?'active':''}" onclick="setImage(${i})"></div>`
-            ).join('');
+            const galleryDots = document.getElementById('galleryDots');
+            if(currentProduct.images.length > 1) {
+                galleryDots.innerHTML = currentProduct.images.map((_, i) => 
+                    `<div class="dot ${i===0?'active':''}" onclick="setImage(${i})"></div>`
+                ).join('');
+                galleryDots.style.display = 'flex';
+            } else {
+                galleryDots.style.display = 'none';
+            }
             
             // Variantes
             let variants = '';
             for(let key in currentProduct.attributes) {
-                variants += `
-                    <div class="variant-section">
-                        <div class="variant-label">${key}:</div>
-                        <div class="variant-options" data-variant="${key}">
-                            ${currentProduct.attributes[key].map((v, i) => 
-                                `<button class="variant-btn ${i===0?'selected':''}" onclick="selectVariant('${key}', '${v}')">${v}</button>`
-                            ).join('')}
+                if(currentProduct.attributes[key].length > 0) {
+                    variants += `
+                        <div class="variant-section">
+                            <div class="variant-label">${key}:</div>
+                            <div class="variant-options" data-variant="${key}">
+                                ${currentProduct.attributes[key].map((v, i) => 
+                                    `<button class="variant-btn ${i===0?'selected':''}" onclick="selectVariant('${key}', '${v}')">${v}</button>`
+                                ).join('')}
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                }
             }
             document.getElementById('variantSelectors').innerHTML = variants;
             
@@ -1266,27 +1323,38 @@
         }
 
         function quickAddToCart(id) {
-            const product = products.find(p => p.id === id);
-            if(!product || !product.inStock) return;
+            const productId = parseInt(id);
+            const product = products.find(p => p.id === productId);
+            
+            if(!product) {
+                showToast("⚠️ Producto no encontrado");
+                return;
+            }
+            
+            if(!product.inStock) {
+                showToast("⚠️ Producto agotado");
+                return;
+            }
 
-            const existing = cart.find(item => item.id === id && !Object.keys(item.variants).length);
+            const existing = cart.find(item => item.id === productId && Object.keys(item.variants).length === 0);
             
             if(existing) {
                 existing.qty++;
+                showToast("✅ Cantidad actualizada");
             } else {
                 cart.push({
                     id: product.id,
                     name: product.name,
                     price: product.price,
-                    image: product.images[0],
+                    image: product.images[0] || 'https://via.placeholder.com/300',
                     variants: {},
                     qty: 1
                 });
+                showToast("✅ Agregado al carrito");
             }
 
             localStorage.setItem('butic_cart', JSON.stringify(cart));
             updateCartCount();
-            showToast("✅ Agregado al carrito");
         }
 
         // --- CARRITO ---
@@ -1465,39 +1533,71 @@
         }
 
         // --- FUNCIONES PANEL ADMIN ---
-        function openAdmin() { document.getElementById('adminModal').classList.add('active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-        function isAdminMode() { return document.getElementById('adminDashboard').style.display === 'block'; }
+        function openAdmin() { 
+            document.getElementById('adminModal').classList.add('active'); 
+        }
+        
+        function closeModal(id) { 
+            document.getElementById(id).classList.remove('active'); 
+        }
+        
+        function isAdminMode() { 
+            return isAdminLoggedIn; 
+        }
         
         function loginAdmin() {
-            if(document.getElementById('adminPass').value === "System32") {
+            const password = document.getElementById('adminPass').value;
+            if(password === "System32") {
+                isAdminLoggedIn = true;
                 document.getElementById('adminLogin').style.display = 'none';
                 document.getElementById('adminDashboard').style.display = 'block';
                 renderAdminProducts();
                 renderCategories();
-                renderProducts(products); 
-            } else showToast("Contraseña incorrecta");
+                renderProducts(products);
+                showToast("✅ Sesión admin iniciada");
+            } else {
+                showToast("❌ Contraseña incorrecta");
+            }
         }
 
         function switchAdminTab(t) {
             document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
-            event.target.classList.add('active');
-            ['products', 'add', 'config'].forEach(x => document.getElementById('tab-'+x).style.display = (x===t)?'block':'none');
+            
+            // Encontrar y activar el tab clickeado
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                if(tab.textContent.toLowerCase().includes(t)) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            ['products', 'add', 'config'].forEach(x => {
+                const elem = document.getElementById('tab-'+x);
+                if(elem) elem.style.display = (x===t) ? 'block' : 'none';
+            });
         }
 
         function renderAdminProducts() {
             const list = document.getElementById('adminProductList');
-            list.innerHTML = '';
-            products.forEach(p => {
-                list.innerHTML += `
-                    <div style="display:flex; justify-content:space-between; padding:12px; background:rgba(255,255,255,0.05); margin-bottom:8px; border-radius:12px; border:1px solid var(--glass-border)">
-                        <span style="color:${p.inStock?'white':'#ff4444'}">${p.name} ($${p.price})</span>
-                        <div>
-                            <i class="fas fa-edit" style="color:var(--electric-blue); margin-right:15px; cursor:pointer" onclick="editProduct(${p.id})"></i>
-                            <i class="fas fa-trash" style="color:var(--gold-accent); cursor:pointer" onclick="deleteProduct(${p.id})"></i>
-                        </div>
-                    </div>`;
-            });
+            if(!list) return;
+            
+            if(products.length === 0) {
+                list.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted)">No hay productos. Crea uno nuevo.</div>';
+                return;
+            }
+            
+            list.innerHTML = products.map(p => `
+                <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:rgba(255,255,255,0.05); margin-bottom:8px; border-radius:12px; border:1px solid var(--glass-border)">
+                    <div>
+                        <div style="color:${p.inStock?'white':'#ff4444'}; font-weight:600">${p.name}</div>
+                        <div style="font-size:0.85rem; color:var(--text-muted)">$${p.price.toFixed(2)} • ${p.category}</div>
+                    </div>
+                    <div style="display:flex; gap:15px">
+                        <i class="fas fa-edit" style="color:var(--electric-blue); cursor:pointer; font-size:1.1rem" onclick="editProduct(${p.id})" title="Editar"></i>
+                        <i class="fas fa-trash" style="color:var(--gold-accent); cursor:pointer; font-size:1.1rem" onclick="deleteProduct(${p.id})" title="Eliminar"></i>
+                    </div>
+                </div>
+            `).join('');
         }
 
         function renderAttributeInputs(preset=null) {
@@ -1521,12 +1621,15 @@
 
         function saveProduct() {
             const id = document.getElementById('editProductId').value;
-            const name = document.getElementById('prodName').value;
+            const name = document.getElementById('prodName').value.trim();
             const price = parseFloat(document.getElementById('prodPrice').value);
             const category = document.getElementById('prodCategory').value;
-            const imagesRaw = document.getElementById('prodImages').value;
+            const imagesRaw = document.getElementById('prodImages').value.trim();
             
-            if(!name || !price) return showToast("Faltan datos");
+            if(!name || !price || price <= 0) {
+                showToast("⚠️ Completa nombre y precio válido");
+                return;
+            }
 
             let attrs = {};
             document.querySelectorAll('.attr-input').forEach(i => {
@@ -1534,18 +1637,33 @@
                 if(val.length) attrs[i.dataset.key] = val;
             });
 
+            const images = imagesRaw.split(',').map(s=>s.trim()).filter(s=>s!=='');
+            if(images.length === 0) {
+                images.push('https://via.placeholder.com/300/0a192f/00f2ff?text=Sin+Imagen');
+            }
+
             const newProd = {
                 id: id ? parseInt(id) : Date.now(),
-                name, price, category, 
-                images: imagesRaw.split(',').map(s=>s.trim()).filter(s=>s!==''),
-                desc: document.getElementById('prodDesc').value,
+                name, 
+                price, 
+                category, 
+                images,
+                desc: document.getElementById('prodDesc').value.trim(),
                 attributes: attrs,
                 isNew: document.getElementById('prodNew').checked,
                 inStock: document.getElementById('prodStock').checked
             };
 
-            if(id) products[products.findIndex(p=>p.id==id)] = newProd;
-            else products.push(newProd);
+            if(id) {
+                const index = products.findIndex(p => p.id === parseInt(id));
+                if(index !== -1) {
+                    products[index] = newProd;
+                    showToast("✅ Producto actualizado");
+                }
+            } else {
+                products.push(newProd);
+                showToast("✅ Producto creado");
+            }
 
             saveDataToCloud();
             clearForm();
@@ -1556,33 +1674,56 @@
         }
 
         function editProduct(id) {
-            const p = products.find(x => x.id === id);
+            const productId = parseInt(id);
+            const p = products.find(x => x.id === productId);
+            
+            if(!p) {
+                showToast("⚠️ Producto no encontrado");
+                return;
+            }
+            
             document.getElementById('editProductId').value = p.id;
             document.getElementById('prodName').value = p.name;
             document.getElementById('prodPrice').value = p.price;
             document.getElementById('prodCategory').value = p.category;
             document.getElementById('prodImages').value = p.images.join(', ');
-            document.getElementById('prodDesc').value = p.desc;
-            document.getElementById('prodNew').checked = p.isNew;
-            document.getElementById('prodStock').checked = p.inStock;
+            document.getElementById('prodDesc').value = p.desc || '';
+            document.getElementById('prodNew').checked = p.isNew || false;
+            document.getElementById('prodStock').checked = p.inStock !== false;
             renderAttributeInputs(p.attributes);
             switchAdminTab('add');
         }
 
         function deleteProduct(id) {
+            const productId = parseInt(id);
+            const productIndex = products.findIndex(p => p.id === productId);
+            
+            if(productIndex === -1) {
+                showToast("⚠️ Producto no encontrado");
+                return;
+            }
+
             if(confirm("¿Eliminar este producto?")) {
-                products = products.filter(p => p.id !== id);
+                products.splice(productIndex, 1);
                 saveDataToCloud();
                 renderAdminProducts();
                 renderCategories();
                 renderProducts(products);
+                showToast("✅ Producto eliminado");
             }
         }
 
         function clearForm() {
             document.getElementById('editProductId').value = '';
-            document.querySelectorAll('#tab-add input:not([type=checkbox]):not([type=file]), #tab-add textarea').forEach(i => i.value='');
+            document.getElementById('prodName').value = '';
+            document.getElementById('prodPrice').value = '';
+            document.getElementById('prodCategory').value = 'clothing';
+            document.getElementById('prodImages').value = '';
+            document.getElementById('prodDesc').value = '';
+            document.getElementById('prodNew').checked = false;
+            document.getElementById('prodStock').checked = true;
             renderAttributeInputs();
+            showToast("📝 Formulario limpiado");
         }
 
         function showToast(msg) {
