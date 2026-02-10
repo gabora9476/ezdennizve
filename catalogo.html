@@ -3,41 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Astral Boutique</title>
+    <title>EzDenniz Shop</title>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     
-    <link rel="icon" href="https://i.imgur.com/4L6X5Qj.png" type="image/png">
+    <link rel="icon" href="https://i.ibb.co/Y4yVWpZd/1logo-gold.png" type="image/png">
     
     <style>
         :root {
-            /* Variables Base (Se actualizan con JS desde el Admin) */
-            --primary-color: #d4af37;
-            --accent-color: #ff007f;
-            --bg-dark: #050505;
+            /* Variables Base (Colores del index.html) */
+            --primary-color: #ffb400;
+            --accent-color: #00f2ff;
+            --bg-dark: #05070a;
             
             /* Variables Computadas */
             --dynamic-bg: linear-gradient(90deg, var(--primary-color), var(--accent-color));
             --dynamic-text: linear-gradient(45deg, var(--primary-color), var(--accent-color));
             
             /* Sistema Glassmorphism */
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-blur: blur(16px);
+            --glass-bg: rgba(10, 20, 30, 0.95);
+            --glass-border: rgba(0, 242, 255, 0.3);
+            --glass-blur: blur(20px);
             --text-main: #ffffff;
             --text-muted: #a0a0a0;
-            --radius: 16px;
+            --radius: 20px;
         }
 
         /* --- UI GLOBAL & ANTI-ROBO --- */
         body { 
-            -webkit-user-select: none; /* Chrome/Safari */        
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE10+ */
-            user-select: none; /* Standard */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
             
             background-color: var(--bg-dark); 
+            background: radial-gradient(circle at center, #0a192f 0%, #05070a 100%);
             color: var(--text-main); 
             min-height: 100vh;
             display: flex;
@@ -51,7 +52,7 @@
         }
         
         img { 
-            pointer-events: none; /* Evita arrastrar imagen */ 
+            pointer-events: none;
             -webkit-user-drag: none;
         }
 
@@ -86,7 +87,7 @@
 
         /* --- HEADER --- */
         header {
-            background: rgba(5, 5, 5, 0.7);
+            background: rgba(5, 7, 10, 0.95);
             backdrop-filter: var(--glass-blur);
             -webkit-backdrop-filter: var(--glass-blur);
             padding: 15px 25px;
@@ -97,7 +98,7 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--glass-border);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 242, 255, 0.2);
         }
 
         .logo-container {
@@ -107,19 +108,26 @@
         }
 
         .logo-img {
-            height: 32px;
+            height: 40px;
             width: auto;
-            filter: drop-shadow(0 0 3px var(--primary-color));
+            filter: drop-shadow(0 0 5px var(--primary-color));
+            animation: logoFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         .logo-text { 
             font-size: 1.3rem; 
-            font-weight: 600; 
+            font-weight: 700; 
             background: var(--dynamic-text); 
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent; 
             letter-spacing: 1px;
             text-transform: uppercase;
+            text-shadow: 0 0 10px var(--accent-color);
         }
         
         .header-icons i { 
@@ -131,7 +139,10 @@
             pointer-events: auto; 
         }
         
-        .header-icons i:hover { color: var(--primary-color); }
+        .header-icons i:hover { 
+            color: var(--primary-color);
+            filter: drop-shadow(0 0 8px var(--primary-color));
+        }
         
         .cart-count { 
             position: absolute; top: -5px; right: -8px; 
@@ -159,7 +170,7 @@
         .filters::-webkit-scrollbar { display: none; }
         
         .filter-btn { 
-            background: var(--glass-bg); 
+            background: rgba(255, 255, 255, 0.05); 
             color: var(--text-muted); 
             border: 1px solid var(--glass-border); 
             padding: 10px 20px; border-radius: 30px; 
@@ -171,7 +182,8 @@
         .filter-btn.active { 
             background: var(--dynamic-bg); 
             color: white; border: none; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 242, 255, 0.4); 
+            font-weight: 600;
         }
 
         /* GRID PRODUCTOS */
@@ -187,20 +199,20 @@
             border-radius: var(--radius); 
             overflow: hidden; position: relative; 
             transition: transform 0.3s, box-shadow 0.3s; 
-            backdrop-filter: blur(5px); 
+            backdrop-filter: blur(20px); 
             cursor: pointer; pointer-events: auto;
         }
         
         .product-card:hover { 
             transform: translateY(-5px); 
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
-            border-color: var(--primary-color); 
+            box-shadow: 0 10px 25px rgba(0, 242, 255, 0.3); 
+            border-color: var(--accent-color); 
         }
         .product-card:active { transform: scale(0.98); }
         
         .badge-new { 
             position: absolute; top: 10px; left: 10px; 
-            background: var(--accent-color); color: white; 
+            background: var(--accent-color); color: black; 
             font-size: 0.6rem; padding: 4px 8px; 
             border-radius: 4px; z-index: 2; 
             font-weight: 700; letter-spacing: 1px; 
@@ -219,7 +231,7 @@
         
         .card-info { 
             padding: 15px; 
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); 
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); 
             position: absolute; bottom: 0; width: 100%; 
         }
         
@@ -237,7 +249,7 @@
         /* --- FOOTER --- */
         footer {
             margin-top: auto; border-top: 1px solid var(--glass-border); 
-            padding: 30px 20px; background: rgba(0,0,0,0.6); 
+            padding: 30px 20px; background: rgba(5, 7, 10, 0.9); 
             backdrop-filter: blur(10px); text-align: center;
         }
         
@@ -250,19 +262,22 @@
             width: 45px; height: 45px; border-radius: 50%; 
             background: rgba(255,255,255,0.05); 
             display: flex; align-items: center; justify-content: center; 
-            color: white; font-size: 1.3rem; 
+            color: var(--accent-color); font-size: 1.3rem; 
             text-decoration: none; transition: 0.3s; 
             border: 1px solid var(--glass-border);
         }
         
         .social-btn:hover { 
-            border-color: var(--primary-color); color: var(--primary-color); 
-            transform: translateY(-5px); background: rgba(255,255,255,0.1); 
+            border-color: var(--primary-color); 
+            color: black;
+            background: var(--primary-color);
+            transform: scale(1.2) translateY(-5px); 
+            box-shadow: 0 0 15px var(--primary-color);
         }
         
         .copyright { font-size: 0.8rem; color: #888; }
         .powered-by { 
-            font-size: 0.75rem; color: var(--primary-color); 
+            font-size: 0.75rem; color: var(--accent-color); 
             margin-top: 5px; opacity: 0.8; 
             letter-spacing: 1px; font-weight: 300; 
         }
@@ -271,19 +286,21 @@
         .modal { 
             display: none; position: fixed; top: 0; left: 0; 
             width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.8); z-index: 1000; 
+            background: rgba(0,0,0,0.9); z-index: 1000; 
             justify-content: center; align-items: center; 
             backdrop-filter: blur(8px); 
         }
         .modal.active { display: flex; animation: fadeIn 0.3s forwards; }
         
         .modal-content { 
-            background: rgba(15, 15, 15, 0.95); 
+            background: var(--glass-bg); 
             width: 100%; border-radius: 25px; 
             padding: 25px; max-height: 90vh; 
             overflow-y: auto; position: relative; 
             border: 1px solid var(--glass-border); 
-            box-shadow: 0 0 50px rgba(0,0,0,0.7); max-width: 500px;
+            box-shadow: 0 0 50px rgba(0, 242, 255, 0.3); 
+            max-width: 500px;
+            backdrop-filter: var(--glass-blur);
         }
         
         .close-modal { 
@@ -294,7 +311,10 @@
             display: flex; align-items: center; justify-content: center; 
             transition: 0.3s; z-index: 10; pointer-events: auto; 
         }
-        .close-modal:hover { background: var(--accent-color); transform: rotate(90deg); }
+        .close-modal:hover { 
+            background: var(--accent-color); 
+            transform: rotate(90deg); 
+        }
 
         /* --- MODAL PRODUCTO COMPACTO --- */
         .modal-body-compact { display: flex; gap: 15px; margin-bottom: 15px; }
@@ -336,9 +356,9 @@
         }
         .option-chip.selected { 
             border-color: var(--primary-color); 
-            background: rgba(212, 175, 55, 0.15); 
+            background: rgba(255, 180, 0, 0.15); 
             color: var(--primary-color); 
-            box-shadow: 0 0 5px rgba(212, 175, 55, 0.2); 
+            box-shadow: 0 0 5px rgba(255, 180, 0, 0.3); 
         }
 
         /* --- GALERÍA FULLSCREEN --- */
@@ -385,7 +405,7 @@
             width: 100%; background: var(--dynamic-bg); border: none; 
             padding: 14px; border-radius: 12px; color: white; 
             font-weight: 600; font-size: 1rem; margin-top: 10px; 
-            cursor: pointer; box-shadow: 0 5px 20px rgba(0,0,0,0.3); 
+            cursor: pointer; box-shadow: 0 5px 20px rgba(0, 242, 255, 0.3); 
             transition: 0.3s; pointer-events: auto; 
         }
         .btn-primary:active { transform: scale(0.98); }
@@ -405,7 +425,11 @@
             margin-bottom: 12px; outline: none; 
             transition: 0.3s; pointer-events: auto; 
         }
-        .input-glass:focus { border-color: var(--primary-color); background: rgba(0,0,0,0.5); }
+        .input-glass:focus { 
+            border-color: var(--primary-color); 
+            background: rgba(0,0,0,0.5); 
+            box-shadow: 0 0 10px rgba(255, 180, 0, 0.2);
+        }
 
         /* --- ADMIN STYLES --- */
         .admin-tabs { 
@@ -418,15 +442,30 @@
             cursor: pointer; color: var(--text-muted); 
             border-radius: 8px; transition: 0.3s; font-size: 0.9rem; 
         }
-        .tab.active { background: rgba(255,255,255,0.1); color: var(--primary-color); font-weight: bold; }
+        .tab.active { 
+            background: rgba(255,255,255,0.1); 
+            color: var(--primary-color); 
+            font-weight: bold; 
+        }
         
         .upload-area { 
-            border: 2px dashed rgba(255,255,255,0.2); 
+            border: 2px dashed rgba(0, 242, 255, 0.3); 
             padding: 20px; text-align: center; 
             border-radius: 12px; margin-bottom: 15px; 
             cursor: pointer; transition: 0.3s; pointer-events: auto; 
+            background: rgba(255,255,255,0.02);
         }
-        .upload-area:hover { border-color: var(--primary-color); background: rgba(255,255,255,0.02); }
+        .upload-area:hover { 
+            border-color: var(--primary-color); 
+            background: rgba(255, 180, 0, 0.05); 
+        }
+
+        .upload-spinner {
+            display: none;
+            margin-top: 10px;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+        }
         
         .color-config-row { 
             display: flex; align-items: center; 
@@ -446,16 +485,27 @@
 
         .toast { 
             position: fixed; bottom: 20px; left: 50%; 
-            transform: translateX(-50%); background: rgba(20,20,20,0.9); 
-            backdrop-filter: blur(10px); border: 1px solid var(--glass-border); 
+            transform: translateX(-50%); 
+            background: rgba(10, 20, 30, 0.95); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid var(--accent-color); 
             color: white; padding: 12px 25px; border-radius: 30px; 
             font-size: 0.9rem; opacity: 0; pointer-events: none; 
             transition: 0.3s; z-index: 2000; 
             display: flex; align-items: center; gap: 10px; 
-            border: 1px solid var(--primary-color); 
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.3);
         }
         .toast.show { opacity: 1; bottom: 40px; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Preview de imagen subida */
+        .image-preview {
+            max-width: 150px;
+            max-height: 150px;
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--glass-border);
+        }
     </style>
 </head>
 <body oncontextmenu="return false;">
@@ -465,8 +515,8 @@
 
     <header>
         <div class="logo-container">
-            <img src="https://i.imgur.com/4L6X5Qj.png" alt="Astral Logo" class="logo-img">
-            <span class="logo-text">Astral Boutique</span>
+            <img src="https://i.ibb.co/Y4yVWpZd/1logo-gold.png" alt="EzDenniz Logo" class="logo-img">
+            <span class="logo-text">EzDenniz Shop</span>
         </div>
         <div class="header-icons">
             <div style="position:relative; display:inline-block">
@@ -484,7 +534,7 @@
 
     <footer id="appFooter">
         <div class="social-icons" id="socialLinksContainer"></div>
-        <div class="copyright">&copy; 2024 Astral Boutique.</div>
+        <div class="copyright">&copy; 2026 EzDenniz Shop.</div>
         <div class="powered-by">Powered by Gabora646</div>
     </footer>
 
@@ -564,10 +614,12 @@
                 <div id="tab-add" style="display: none;">
                     <input type="hidden" id="editProductId">
                     <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
-                        <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--text-muted);"></i>
-                        <p style="margin-top: 5px; font-size: 0.8rem;">Subir imagen (ImgBB)</p>
-                        <input type="file" id="imageUpload" style="display: none;" accept="image/*" onchange="uploadToImgbb(this)">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 2rem; color: var(--accent-color);"></i>
+                        <p style="margin-top: 5px; font-size: 0.8rem;">Subir imágenes del producto</p>
+                        <p style="font-size: 0.7rem; color: #888; margin-top: 5px;">Puedes subir múltiples imágenes</p>
+                        <input type="file" id="imageUpload" style="display: none;" accept="image/*" multiple onchange="uploadToImgbb(this)">
                         <div id="uploadSpinner" class="upload-spinner"><i class="fas fa-spinner fa-spin"></i> Subiendo...</div>
+                        <div id="imagePreviewContainer" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 10px;"></div>
                     </div>
                     <input type="text" id="prodName" class="input-glass" placeholder="Nombre del artículo">
                     <div style="display:flex; gap:10px;">
@@ -580,7 +632,7 @@
                             <option value="makeup">Maquillaje</option>
                         </select>
                     </div>
-                    <textarea id="prodImages" class="input-glass" rows="2" placeholder="URLs imágenes (separar con coma)"></textarea>
+                    <textarea id="prodImages" class="input-glass" rows="2" placeholder="URLs imágenes (generadas automáticamente al subir)" readonly style="opacity: 0.7;"></textarea>
                     <textarea id="prodDesc" class="input-glass" rows="2" placeholder="Descripción"></textarea>
                     <div id="dynamicAttributes" style="margin-bottom: 10px;"></div>
                     <div style="display: flex; gap: 15px; margin-bottom: 15px;">
@@ -604,15 +656,15 @@
 
                     <div class="color-config-row">
                         <span>Color Primario</span>
-                        <input type="color" id="color-primary" class="color-input" value="#d4af37">
+                        <input type="color" id="color-primary" class="color-input" value="#ffb400">
                     </div>
                     <div class="color-config-row">
                         <span>Color Acento</span>
-                        <input type="color" id="color-accent" class="color-input" value="#ff007f">
+                        <input type="color" id="color-accent" class="color-input" value="#00f2ff">
                     </div>
                     <div class="color-config-row">
                         <span>Fondo</span>
-                        <input type="color" id="color-bg" class="color-input" value="#050505">
+                        <input type="color" id="color-bg" class="color-input" value="#05070a">
                     </div>
                     <button class="btn-primary" onclick="applyAndSaveTheme()">Aplicar</button>
                     <button class="btn-secondary" onclick="resetTheme()">Restaurar Default</button>
@@ -639,7 +691,6 @@
                     <hr style="border-color: var(--glass-border); margin: 20px 0;">
                     
                     <h4 style="color: var(--primary-color);">Credenciales</h4>
-                    <input type="text" id="cfgImgbbKey" class="input-glass" placeholder="ImgBB Key">
                     <input type="text" id="cfgBinId" class="input-glass" placeholder="JSONBin ID (Requerido)">
                     <input type="text" id="cfgApiKey" class="input-glass" placeholder="JSONBin Master Key">
                     
@@ -660,6 +711,8 @@
 
     <script>
         // --- ESTADO & CONFIGURACIÓN INICIAL ---
+        const IMGBB_API_KEY = '90e7c483744d7ad2c5e41b7168f9308e';
+        
         let products = [
             // Producto demo inicial
             { 
@@ -676,18 +729,18 @@
         ];
         
         let cart = [];
+        let uploadedImageUrls = [];
         
         // Tus credenciales configuradas
         let config = {
             binId: localStorage.getItem('butic_binId') || '69658857d0ea881f40678f48',
             apiKey: localStorage.getItem('butic_apiKey') || '$2a$10$dA7EJL7AkWBNkHLyVflDme6uxH4jSuGjdywTiOQuICg9GFJDUWkcK',
-            imgbbKey: localStorage.getItem('butic_imgbbKey') || '7faa542847653860ccfec6b581b2fbde',
             
             theme: JSON.parse(localStorage.getItem('butic_theme')) || {
                 mode: 'gradient',
-                primary: '#d4af37',
-                accent: '#ff007f',
-                bg: '#050505'
+                primary: '#ffb400',
+                accent: '#00f2ff',
+                bg: '#05070a'
             },
             
             socials: JSON.parse(localStorage.getItem('butic_socials')) || {
@@ -722,7 +775,6 @@
             // Rellenar Admin Panel con datos
             document.getElementById('cfgBinId').value = config.binId;
             document.getElementById('cfgApiKey').value = config.apiKey;
-            document.getElementById('cfgImgbbKey').value = config.imgbbKey;
             
             document.getElementById('cfgPayTransfer').value = config.paymentInfo.transferencia;
             document.getElementById('cfgPayUsdt').value = config.paymentInfo.usdt;
@@ -1012,7 +1064,7 @@
             const ref = document.getElementById('paymentRef').value;
             if(!method) return showToast("Selecciona pago");
             
-            let msg = `*PEDIDO WEB - ASTRAL*\n----------------\n`;
+            let msg = `*PEDIDO WEB - EZDENNIZ SHOP*\n----------------\n`;
             cart.forEach(i => msg += `▪ ${i.name} (${Object.values(i.selectedAttrs).join('/')}) x${i.qty}\n`);
             msg += `\n*TOTAL: ${document.getElementById('cartTotal').innerText}*\n`;
             msg += `Pago: ${method.toUpperCase()}\nRef: ${ref || 'Pendiente'}\nID: ${Date.now().toString().slice(-4)}`;
@@ -1021,29 +1073,50 @@
             cart = []; updateCartUI(); closeModal('checkoutModal');
         }
 
-        // --- CONEXIONES API (IMGBB + JSONBIN) ---
+        // --- UPLOAD A IMGBB ---
         async function uploadToImgbb(input) {
-            const file = input.files[0];
-            if (!file) return;
-            const apiKey = document.getElementById('cfgImgbbKey').value;
-            
-            if(!apiKey) return alert("Primero configura tu API Key de ImgBB");
+            const files = input.files;
+            if (!files || files.length === 0) return;
 
             document.getElementById('uploadSpinner').style.display = 'block';
-            const formData = new FormData();
-            formData.append("image", file);
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            
+            for (let file of files) {
+                const formData = new FormData();
+                formData.append("image", file);
 
-            try {
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, { method: "POST", body: formData });
-                const data = await res.json();
-                if (data.success) {
-                    const currentUrls = document.getElementById('prodImages').value;
-                    const separator = currentUrls.length > 0 ? ', ' : '';
-                    document.getElementById('prodImages').value += separator + data.data.url;
-                    showToast("✅ Imagen subida");
-                } else showToast("❌ Error al subir");
-            } catch (error) { showToast("❌ Error de red"); } 
-            finally { document.getElementById('uploadSpinner').style.display = 'none'; }
+                try {
+                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, { 
+                        method: "POST", 
+                        body: formData 
+                    });
+                    const data = await res.json();
+                    
+                    if (data.success) {
+                        uploadedImageUrls.push(data.data.url);
+                        
+                        // Actualizar campo de texto
+                        document.getElementById('prodImages').value = uploadedImageUrls.join(', ');
+                        
+                        // Mostrar preview
+                        const img = document.createElement('img');
+                        img.src = data.data.url;
+                        img.className = 'image-preview';
+                        previewContainer.appendChild(img);
+                        
+                        showToast(`✅ Imagen ${uploadedImageUrls.length} subida`);
+                    } else {
+                        showToast("❌ Error al subir imagen");
+                    }
+                } catch (error) {
+                    showToast("❌ Error de red");
+                    console.error(error);
+                }
+            }
+            
+            document.getElementById('uploadSpinner').style.display = 'none';
+            // Limpiar input para permitir subir más imágenes
+            input.value = '';
         }
 
         async function fetchData() {
@@ -1073,7 +1146,6 @@
             // Capturar valores del DOM
             config.binId = document.getElementById('cfgBinId').value;
             config.apiKey = document.getElementById('cfgApiKey').value;
-            config.imgbbKey = document.getElementById('cfgImgbbKey').value;
             
             config.paymentInfo = {
                 transferencia: document.getElementById('cfgPayTransfer').value,
@@ -1090,7 +1162,6 @@
             // Guardar local
             localStorage.setItem('butic_binId', config.binId);
             localStorage.setItem('butic_apiKey', config.apiKey);
-            localStorage.setItem('butic_imgbbKey', config.imgbbKey);
             localStorage.setItem('butic_paymentInfo', JSON.stringify(config.paymentInfo));
             localStorage.setItem('butic_socials', JSON.stringify(config.socials));
 
@@ -1217,6 +1288,20 @@
             document.getElementById('prodDesc').value = p.desc;
             document.getElementById('prodNew').checked = p.isNew;
             document.getElementById('prodStock').checked = p.inStock;
+            
+            // Prellenar las URLs subidas
+            uploadedImageUrls = p.images;
+            
+            // Mostrar previews
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            previewContainer.innerHTML = '';
+            p.images.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.className = 'image-preview';
+                previewContainer.appendChild(img);
+            });
+            
             renderAttributeInputs(p.attributes);
             switchAdminTab('add');
         }
@@ -1234,6 +1319,8 @@
         function clearForm() {
             document.getElementById('editProductId').value = '';
             document.querySelectorAll('#tab-add input:not([type=checkbox]):not([type=file]), #tab-add textarea').forEach(i => i.value='');
+            uploadedImageUrls = [];
+            document.getElementById('imagePreviewContainer').innerHTML = '';
             renderAttributeInputs();
         }
 
